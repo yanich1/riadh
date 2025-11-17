@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Knowledge Seekers Application</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #4a6fa5;
+            --secondary: #6b8cbc;
+            --accent: #ff9e44;
+            --light: #f8f9fa;
+            --dark: #2c3e50;
+            --success: #2ecc71;
+            --error: #e74c3c;
+            --border-radius: 10px;
+            --box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+            color: var(--dark);
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 30px;
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-size: 2.2rem;
+        }
+
+        .subtitle {
+            color: var(--secondary);
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .form-container {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .required::after {
+            content: " *";
+            color: var(--error);
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            transition: var(--transition);
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(74, 111, 165, 0.2);
+        }
+
+        .radio-group, .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .radio-option, .checkbox-option {
+            display: flex;
+            align-items: flex-start;
+            padding: 10px;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+        }
+
+        .radio-option:hover, .checkbox-option:hover {
+            background-color: #f8f9fa;
+        }
+
+        .radio-option input, .checkbox-option input {
+            width: auto;
+            margin-right: 12px;
+            margin-top: 3px;
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 20px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        .btn {
+            display: inline-block;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .btn i {
+            margin-right: 8px;
+        }
+
+        .form-footer {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .helper-text {
+            font-size: 0.85rem;
+            color: #7f8c8d;
+            margin-top: 5px;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            color: var(--primary);
+            margin: 30px 0 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .character-count {
+            text-align: right;
+            font-size: 0.8rem;
+            color: #7f8c8d;
+            margin-top: 5px;
+        }
+
+        .error-message {
+            color: var(--error);
+            font-size: 0.85rem;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .success-message {
+            background-color: rgba(46, 204, 113, 0.1);
+            border: 1px solid var(--success);
+            color: var(--success);
+            padding: 15px;
+            border-radius: var(--border-radius);
+            margin-bottom: 20px;
+            text-align: center;
+            display: none;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            .form-container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--secondary);
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-brain"></i>
+            </div>
+            <h1>Knowledge Seekers</h1>
+            <p class="subtitle">Welcome among us! Share your perspectives and join our community of curious minds.</p>
+        </header>
+        
+        <div class="form-container">
+            <div class="success-message" id="successMessage">
+                <i class="fas fa-check-circle"></i> Thank you! Your application has been submitted successfully. We'll contact you soon.
+            </div>
+            
+            <form id="applicationForm" action="https://formspree.io/f/xpzvwjzj" method="POST">
+                <h2 class="section-title">Personal Information</h2>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="firstName" class="required">First Name</label>
+                        <input type="text" id="firstName" name="firstName" required>
+                        <div class="error-message" id="firstNameError">Please enter your first name</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="lastName" class="required">Last Name</label>
+                        <input type="text" id="lastName" name="lastName" required>
+                        <div class="error-message" id="lastNameError">Please enter your last name</div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" name="phone" placeholder="e.g., +1 (555) 123-4567">
+                    <p class="helper-text">Optional - for community communication purposes only</p>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email" class="required">Email Address</label>
+                    <input type="email" id="email" name="email" required placeholder="your.email@example.com">
+                    <div class="error-message" id="emailError">Please enter a valid email address</div>
+                </div>
+                
+                <h2 class="section-title">Thinking & Learning Style</h2>
+                
+                <div class="form-group">
+                    <label>Between Rationality and Intuition, which do you base your decisions on?</label>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" id="rationality" name="decisionStyle" value="rationality">
+                            <label for="rationality">Primarily Rationality - I rely on logic, data, and systematic analysis</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="intuition" name="decisionStyle" value="intuition">
+                            <label for="intuition">Primarily Intuition - I trust my gut feelings and instincts</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="balanced" name="decisionStyle" value="balanced">
+                            <label for="balanced">Balanced Approach - I use both rationality and intuition depending on the situation</label>
+                        </div>
+                    </div>
+                    <div class="error-message" id="decisionStyleError">Please select your decision style</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="knowledgeMethod">What is the method you follow to grow your knowledge?</label>
+                    <textarea id="knowledgeMethod" name="knowledgeMethod" placeholder="Describe your approach to learning and expanding your knowledge..."></textarea>
+                    <div class="character-count"><span id="methodCount">0</span>/500 characters</div>
+                </div>
+                
+                <h2 class="section-title">Philosophical Interests</h2>
+                
+                <div class="form-group">
+                    <label for="philosophyInterest">What do you find interesting in philosophy?</label>
+                    <textarea id="philosophyInterest" name="philosophyInterest" placeholder="Share what aspects of philosophy intrigue you..."></textarea>
+                    <div class="character-count"><span id="philosophyCount">0</span>/500 characters</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="religion">What is your religion? (Optional)</label>
+                    <input type="text" id="religion" name="religion" placeholder="e.g., Christianity, Islam, Buddhism, Atheist, Agnostic, etc.">
+                </div>
+                
+                <div class="form-group">
+                    <label>Are you open to debating religion in an objective way?</label>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" id="debateYes" name="religionDebate" value="yes">
+                            <label for="debateYes">Yes, I'm comfortable with objective discussions about religion</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="debateNo" name="religionDebate" value="no">
+                            <label for="debateNo">No, I prefer not to discuss religion in debates</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="debateSelective" name="religionDebate" value="selective">
+                            <label for="debateSelective">Selectively - depending on the context and participants</label>
+                        </div>
+                    </div>
+                    <div class="error-message" id="religionDebateError">Please select your preference for religious debates</div>
+                </div>
+                
+                <h2 class="section-title">Community Contribution</h2>
+                
+                <div class="form-group">
+                    <label for="clubContribution">What can you add to our community?</label>
+                    <textarea id="clubContribution" name="clubContribution" placeholder="Describe your unique perspectives, skills, or experiences that would benefit our community..."></textarea>
+                    <div class="character-count"><span id="contributionCount">0</span>/500 characters</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="learnerSatisfaction">As a learner, what makes you satisfied?</label>
+                    <textarea id="learnerSatisfaction" name="learnerSatisfaction" placeholder="What aspects of learning bring you the most satisfaction?"></textarea>
+                    <div class="character-count"><span id="satisfactionCount">0</span>/500 characters</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="hobbies">What are your hobbies and which activities are you good at?</label>
+                    <textarea id="hobbies" name="hobbies" placeholder="Share your interests, hobbies, and skills..."></textarea>
+                    <div class="character-count"><span id="hobbiesCount">0</span>/500 characters</div>
+                </div>
+                
+                <div class="form-footer">
+                    <button type="submit" class="btn" id="submitBtn">
+                        <i class="fas fa-paper-plane"></i> Submit Application
+                    </button>
+                </div>
+            </form>
+        </div>
+        
+        <footer>
+            <p>Knowledge Seekers Community &copy; 2023 | Expanding Minds Through Dialogue</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('applicationForm');
+            const submitBtn = document.getElementById('submitBtn');
+            const successMessage = document.getElementById('successMessage');
+            
+            // Character count for textareas
+            const textareas = document.querySelectorAll('textarea');
+            textareas.forEach(textarea => {
+                const countElement = document.getElementById(textarea.id + 'Count');
+                if (countElement) {
+                    textarea.addEventListener('input', function() {
+                        countElement.textContent = this.value.length;
+                    });
+                }
+            });
+            
+            // Form validation
+            function validateForm() {
+                let isValid = true;
+                
+                // Required fields validation
+                const requiredFields = [
+                    { id: 'firstName', errorId: 'firstNameError' },
+                    { id: 'lastName', errorId: 'lastNameError' },
+                    { id: 'email', errorId: 'emailError' }
+                ];
+                
+                requiredFields.forEach(field => {
+                    const input = document.getElementById(field.id);
+                    const error = document.getElementById(field.errorId);
+                    
+                    if (!input.value.trim()) {
+                        error.style.display = 'block';
+                        input.style.borderColor = 'var(--error)';
+                        isValid = false;
+                    } else {
+                        error.style.display = 'none';
+                        input.style.borderColor = '#ddd';
+                    }
+                });
+                
+                // Email validation
+                const email = document.getElementById('email');
+                const emailError = document.getElementById('emailError');
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                
+                if (email.value && !emailRegex.test(email.value)) {
+                    emailError.textContent = 'Please enter a valid email address';
+                    emailError.style.display = 'block';
+                    email.style.borderColor = 'var(--error)';
+                    isValid = false;
+                }
+                
+                // Radio button validation
+                const decisionStyleSelected = document.querySelector('input[name="decisionStyle"]:checked');
+                const decisionStyleError = document.getElementById('decisionStyleError');
+                
+                if (!decisionStyleSelected) {
+                    decisionStyleError.style.display = 'block';
+                    isValid = false;
+                } else {
+                    decisionStyleError.style.display = 'none';
+                }
+                
+                const religionDebateSelected = document.querySelector('input[name="religionDebate"]:checked');
+                const religionDebateError = document.getElementById('religionDebateError');
+                
+                if (!religionDebateSelected) {
+                    religionDebateError.style.display = 'block';
+                    isValid = false;
+                } else {
+                    religionDebateError.style.display = 'none';
+                }
+                
+                return isValid;
+            }
+            
+            // Form submission
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                if (!validateForm()) {
+                    return;
+                }
+                
+                // Show loading state
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<div class="loading"></div> Submitting...';
+                
+                // Using Formspree to send the form data
+                const formData = new FormData(form);
+                
+                fetch(form.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                })
+                .then(response => {
+                    if (response.ok) {
+                        // Show success message
+                        successMessage.style.display = 'block';
+                        form.reset();
+                        
+                        // Reset character counts
+                        document.querySelectorAll('.character-count span').forEach(span => {
+                            span.textContent = '0';
+                        });
+                        
+                        // Scroll to success message
+                        successMessage.scrollIntoView({ behavior: 'smooth' });
+                    } else {
+                        throw new Error('Form submission failed');
+                    }
+                })
+                .catch(error => {
+                    alert('There was an error submitting your form. Please try again later.');
+                    console.error('Error:', error);
+                })
+                .finally(() => {
+                    // Reset button state
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Application';
+                });
+            });
+            
+            // Real-time validation for required fields
+            const requiredInputs = document.querySelectorAll('input[required]');
+            requiredInputs.forEach(input => {
+                input.addEventListener('blur', function() {
+                    const errorId = this.id + 'Error';
+                    const errorElement = document.getElementById(errorId);
+                    
+                    if (!this.value.trim() && errorElement) {
+                        errorElement.style.display = 'block';
+                        this.style.borderColor = 'var(--error)';
+                    } else if (errorElement) {
+                        errorElement.style.display = 'none';
+                        this.style.borderColor = '#ddd';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
